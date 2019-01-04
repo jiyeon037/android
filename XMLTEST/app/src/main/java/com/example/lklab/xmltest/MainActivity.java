@@ -115,18 +115,12 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String str) {
 
             String s = "";
-            Log.i("aaaaaaaaaaa ", String.valueOf(str.length()));
-
-                  //  str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + "<order><Table><abc>mouse</abc></Table><Table><abc>마우스</abc></Table></order>";
-                    Log.i("aaaaaaaaaaa",str);
 
                     try {
                         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                         DocumentBuilder builder = factory.newDocumentBuilder();
                         InputStream is = new ByteArrayInputStream(str.getBytes("UTF-8"));
-                        Log.i("aaaaaaaaaaa ", "1111111111");
                         Document doc = builder.parse(is);
-                        Log.i("aaaaaaaaaaa ", "222222222222");
 
                 NodeList nodeList = doc.getElementsByTagName("Table");
 
@@ -134,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
                     Node node = nodeList.item(i);
                     Element element = (Element) node;
 
-                    NodeList list1 = element.getElementsByTagName("abc");
-                    s += "abc = " + list1.item(0).getChildNodes().item(0).getNodeValue() + "\n";
+                    NodeList list1 = element.getElementsByTagName("stockNum");
+                    s += "stockNum = " + list1.item(0).getChildNodes().item(0).getNodeValue() + "\n";
                 }
 
                 if (str != null) { // null 아니면
