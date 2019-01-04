@@ -117,8 +117,7 @@ public class MainActivity extends AppCompatActivity {
             String s = "";
             Log.i("aaaaaaaaaaa ", String.valueOf(str.length()));
 
-                    str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + "<order><Table><abc>mouse</abc></Table><Table><abc>마우스</abc></Table></order>";
-                    //str = "<order><Table><abc>tq</abc></Table><Table><abc>ww</abc></Table></order>";
+                  //  str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + "<order><Table><abc>mouse</abc></Table><Table><abc>마우스</abc></Table></order>";
                     Log.i("aaaaaaaaaaa",str);
 
                     try {
