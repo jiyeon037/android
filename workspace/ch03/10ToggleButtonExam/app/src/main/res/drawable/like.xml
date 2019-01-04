@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- off 상태에서 표시될 이미지 -->
+    <item
+        android:drawable="@drawable/like_off"
+        android:state_checked="false"></item>
+    <!-- on 상태에서 표시될 이미지 -->
+    <item
+        android:drawable="@drawable/like_on"
+        android:state_checked="true"></item>
+
+</selector>
