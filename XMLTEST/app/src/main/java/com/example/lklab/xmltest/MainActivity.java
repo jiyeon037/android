@@ -27,6 +27,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -107,8 +110,9 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String str) {
 
             String setString = "";
+            List<List<String>> list = new ArrayList<>();
 
-            setString += GetElementValue("stockNum", str, setString);
+            list.add(GetElementValue("stockNum", str)); // tagName의 list(30개)를 List로 반환
 
             if(setString != null)
                 text.setText(setString);
@@ -117,7 +121,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    String GetElementValue(String tagName, String str, String setString){
+    List<String> GetElementValue(String tagName, String str) {
+
+        List<String> list = null;
 
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -125,8 +131,16 @@ public class MainActivity extends AppCompatActivity {
             InputStream is = new ByteArrayInputStream(str.getBytes("UTF-8"));
             Document doc = builder.parse(is);
 
-            for(Node node : asList(doc.getElementsByTagName(tagName))){
-                setString += "stockNum = " + node.getChildNodes().item(0).getNodeValue()+"\n";
+            String setString = "";
+
+            for (Node node : asList(doc.getElementsByTagName(tagName))) {
+                setString += node.getChildNodes().item(0).getNodeValue() + "|"; // tagName의 첫번째
+            }   // tagName의 value 30개가 |로 구분되어서 setString에 저장됨
+
+            list = Arrays.asList(setString.split("\\|"));
+
+            for(String s : list) {
+                Log.i("aaaaaaaaaa", String.valueOf(s));
             }
 
         } catch (ParserConfigurationException e) {
@@ -136,6 +150,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        return setString;
+        return list;
     }
 }
