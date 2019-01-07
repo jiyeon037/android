@@ -1,10 +1,11 @@
 package com.example.lklab.xmltest;
 
+import static com.example.lklab.xmltest.XMLUtil.*;
+
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
-import android.renderscript.ScriptGroup;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,19 +18,15 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -46,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String SOAP_ACTION =
             "http://tempuri.org/StockInterface/GetStockInfo";
     private static final String URL = "http://211.233.61.250:8810/WCFAppLogic8810/Erp.BusinessManager.StockService";
+    private NodeList nodeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,14 +69,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             String result = "";
-            //  Document doc = null;
 
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
             PropertyInfo propertyInfo1 = new PropertyInfo();
             propertyInfo1.setName("stockType");
             propertyInfo1.setValue(params[0]);
-            // propertyInfo1.setType(Integer.TYPE);
             propertyInfo1.setType(String.class);
 
             request.addProperty(propertyInfo1);
@@ -88,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
             envelope.setOutputSoapObject(request);
 
-            // AndroidHttpTransport httpTransportSE = new AndroidHttpTransport(URL,80000);
             HttpTransportSE httpTransportSE = new HttpTransportSE(URL, 80000);
 
             try {
@@ -97,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
                 SoapPrimitive soapPrimitive = (SoapPrimitive) envelope.getResponse();
 
                 result = soapPrimitive.toString();
-
-                Log.i("aaaaaaaaaaa ", "bbbbbbbbbbbb");
 
             } catch (SocketException ex) {
                 Log.e("Error : ", "Error on soapPrimitiveData() " + ex.getMessage());
@@ -114,37 +107,41 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String str) {
 
-            String s = "";
+            String setString = "";
 
-                    try {
-                        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                        DocumentBuilder builder = factory.newDocumentBuilder();
-                        InputStream is = new ByteArrayInputStream(str.getBytes("UTF-8"));
-                        Document doc = builder.parse(is);
+            setString += GetElementValue("stockNum", str, setString);
 
-                NodeList nodeList = doc.getElementsByTagName("Table");
-
-                for (int i = 0; i < nodeList.getLength(); i++) {
-                    Node node = nodeList.item(i);
-                    Element element = (Element) node;
-
-                    NodeList list1 = element.getElementsByTagName("stockNum");
-                    s += "stockNum = " + list1.item(0).getChildNodes().item(0).getNodeValue() + "\n";
-                }
-
-                if (str != null) { // null 아니면
-                    text.setText(s);
-                } else {         // null 이면
-                    text.setText("Result is null");
-                }
-
-            } catch (DOMException e) {
-                Log.e("Error : ", "DOMException() " + e.getMessage());
-                e.printStackTrace();
-            } catch (Exception e) {
-                Log.e("Error : ", "Error() " + e.getMessage());
-                e.printStackTrace();
-            }
+            if(setString != null)
+                text.setText(setString);
+            else
+                text.setText("Result is null");
         }
+    }
+
+    String GetElementValue(String tagName, String str, String setString){
+
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputStream is = new ByteArrayInputStream(str.getBytes("UTF-8"));
+            Document doc = builder.parse(is);
+
+            NodeList nodeList = doc.getElementsByTagName("Table");
+
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+                Element element = (Element) node;
+
+                NodeList list1 = element.getElementsByTagName(tagName);
+                setString += "stockNum = " + list1.item(0).getChildNodes().item(0).getNodeValue() + "\n";
+            }
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
+        return setString;
     }
 }
