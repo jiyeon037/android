@@ -112,13 +112,32 @@ public class MainActivity extends AppCompatActivity {
             String setString = "";
             List<List<String>> list = new ArrayList<>();
 
-            list.add(GetElementValue("stockNum", str)); // tagName의 list(30개)를 List로 반환
+            list.add(0, GetElementValue("stockNum", str)); // tagName의 list(30개)를 List로 반환
+            list.add(1, GetElementValue("StockPartCodeX", str));
+            list.add(2, GetElementValue("BundleItems", str));
+            list.add(3, GetElementValue("BundleNum", str));
+            list.add(4, GetElementValue("BundleRemainder", str));
+            list.add(5, GetElementValue("StockQty", str));
+
+            Log.i("qqqqqqqqq",list.get(0).get(1));
+
+            Stock[] stock = new Stock[30];
+
+            for(int i=0;i<30;i++){  // stock 객체 30개 생성
+                int j=0;
+               stock[i] = MakeStockInstance(list.get(j).get(i),list.get(j+1).get(i),list.get(j+2).get(i),
+                                            list.get(j+3).get(i),list.get(j+4).get(i),list.get(j+5).get(i));
+            }
 
             if(setString != null)
                 text.setText(setString);
             else
                 text.setText("Result is null");
         }
+    }
+
+    Stock MakeStockInstance(String stockNum, String stockPartCodeX, String bundleItems, String bundleNum, String bundleRemainder, String stockQty){
+        return new Stock(stockNum,stockPartCodeX,bundleItems,bundleNum,bundleRemainder,stockQty);
     }
 
     List<String> GetElementValue(String tagName, String str) {

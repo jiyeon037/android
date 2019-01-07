@@ -17,6 +17,18 @@ public class Stock {
         this.stockQty = stockQty;
     }
 
+    @Override
+    public String toString() {
+        return "Stock{" +
+                "stockNum='" + stockNum + '\'' +
+                ", stockPartCodeX='" + stockPartCodeX + '\'' +
+                ", bundleItems='" + bundleItems + '\'' +
+                ", bundleNum='" + bundleNum + '\'' +
+                ", bundleReminder='" + bundleReminder + '\'' +
+                ", stockQty='" + stockQty + '\'' +
+                '}';
+    }
+
     public String getStockNum() {
         return stockNum;
     }
