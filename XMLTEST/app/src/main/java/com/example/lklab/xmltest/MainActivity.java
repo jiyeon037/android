@@ -19,7 +19,6 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -126,15 +125,10 @@ public class MainActivity extends AppCompatActivity {
             InputStream is = new ByteArrayInputStream(str.getBytes("UTF-8"));
             Document doc = builder.parse(is);
 
-            NodeList nodeList = doc.getElementsByTagName("Table");
-
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
-                Element element = (Element) node;
-
-                NodeList list1 = element.getElementsByTagName(tagName);
-                setString += "stockNum = " + list1.item(0).getChildNodes().item(0).getNodeValue() + "\n";
+            for(Node node : asList(doc.getElementsByTagName(tagName))){
+                setString += "stockNum = " + node.getChildNodes().item(0).getNodeValue()+"\n";
             }
+
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {
