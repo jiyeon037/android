@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         });
         adapter = new StockAdapter(this, R.layout.item_list, stocksList);
         listView.setAdapter(adapter);
-        // addData();
     }
 
     private void addData() {
@@ -90,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 구한 xml로 Stock 객체를 생성한다
+     * @param xml
+     * @return
+     */
     private ArrayList<Stock> MakeStockObjects(String xml) {
 
         List<List<String>> list = new ArrayList<>();
@@ -102,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
         list.add(5, GetElementValue("StockQty", xml));
 
         Stock[] stock = new Stock[30];
-
         // stock 객체 30개 생성
         for (int i = 0; i < 30; i++) {
             int j = 0;
@@ -118,8 +121,13 @@ public class MainActivity extends AppCompatActivity {
         return stockList;
     }
 
-    class CallWebService extends AsyncTask<String, String, String> {
+    class CallWebService extends AsyncTask<String, Void, String> {
 
+        /**
+         * xml을 구한다
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(String... params) {
             String xml = "";
